@@ -13,7 +13,7 @@ const createCustomElement = (element, className, innerText) => {
 };
 
 const cartItemClickListener = (event) => {
-  // coloque seu código aqui oi
+event.target.remove();
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -29,7 +29,6 @@ const cartAdd = async (element) => {
   const { id: sku, title: name, price: salePrice } = itemAddBtn;
   const toCart = createCartItemElement({ sku, name, salePrice });
   const cartFull = document.getElementsByClassName('cart__items')[0];
-  // console.log(cartFull);
   cartFull.appendChild(toCart);
 };
 
@@ -55,18 +54,11 @@ const createList = async () => {
   const listReturn = list.results;
 
   listReturn.forEach((element) => {
-    const { id: sku, title: name, thumnail: image } = element;
+    const { id: sku, title: name, thumbnail: image } = element;
     const search = createProductItemElement({ sku, name, image });
     listItem[0].appendChild(search);
   });
 };
-
-// const cartItems = async () => {
-// const addItem = document.getElementsByClassName('item__add');
-// addItem.addEventListener('click', function (event) {
-  
-// });
-// };
 
 window.onload = () => { 
   createList();

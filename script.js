@@ -12,20 +12,6 @@ const createCustomElement = (element, className, innerText) => {
   return e;
 };
 
-const createProductItemElement = ({ sku, name, image }) => {
-  const section = document.createElement('section');
-  section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-  return section;
-};
-
-const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
-
 const cartItemClickListener = (event) => {
   // coloque seu código aqui oi
 };
@@ -38,6 +24,31 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
+const cartAdd = async (element) => {
+  const itemAddBtn = await fetchItem(element);
+  const { id: sku, title: name, price: salePrice } = itemAddBtn;
+  const toCart = createCartItemElement({ sku, name, salePrice });
+  const cartFull = document.getElementsByClassName('cart__items')[0];
+  // console.log(cartFull);
+  cartFull.appendChild(toCart);
+};
+
+const createProductItemElement = ({ sku, name, image }) => {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  const btnCartAdd = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  btnCartAdd.addEventListener('click', () => { cartAdd(sku); });
+  section.appendChild(btnCartAdd);
+
+  return section;
+};
+
+const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+
 const createList = async () => {
   const list = await fetchProducts('compudator');
   const listItem = document.getElementsByClassName('items');
@@ -49,6 +60,14 @@ const createList = async () => {
     listItem[0].appendChild(search);
   });
 };
+
+// const cartItems = async () => {
+// const addItem = document.getElementsByClassName('item__add');
+// addItem.addEventListener('click', function (event) {
+  
+// });
+// };
+
 window.onload = () => { 
   createList();
 };

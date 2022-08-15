@@ -38,4 +38,17 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-window.onload = () => { };
+const createList = async () => {
+  const list = await fetchProducts('compudator');
+  const listItem = document.getElementsByClassName('items');
+  const listReturn = list.results;
+
+  listReturn.forEach((element) => {
+    const { id: sku, title: name, thumnail: image } = element;
+    const search = createProductItemElement({ sku, name, image });
+    listItem[0].appendChild(search);
+  });
+};
+window.onload = () => { 
+  createList();
+};

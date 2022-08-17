@@ -1,3 +1,7 @@
+// const cart = getSavedCartitems('cartItems');
+const cart = document.querySelector('.cart__items');
+const emptyCart = document.querySelector('.empty-cart');
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -39,17 +43,31 @@ const createProductItemElement = ({ sku, name, image }) => {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  const btnCartAdd = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  const btnCartAdd = createCustomElement('button', 'item__add', 'Adicionar ao cart!');
   btnCartAdd.addEventListener('click', () => { cartAdd(sku); });
   section.appendChild(btnCartAdd);
 
   return section;
 };
 
-const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+// const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
+
+const carregando = () => {
+  const text = document.createElement('p');
+  text.className = 'loading';
+  text.innerText = 'carregando...';
+  document.body.appendChild(text);
+};
+
+const pararCarregamento = () => {
+  const text = document.querySelector('.loading');
+  text.remove();
+};
 
 const createList = async () => {
+  carregando();
   const list = await fetchProducts('compudator');
+  pararCarregamento();
   const listItem = document.getElementsByClassName('items');
   const listReturn = list.results;
 
@@ -60,6 +78,12 @@ const createList = async () => {
   });
 };
 
+emptyCart.addEventListener('click', () => {
+  while (cart.firstChild) {
+    cart.removeChild(cart.firstChild);
+  }
+});
+
 window.onload = () => { 
   createList();
-};
+  };
